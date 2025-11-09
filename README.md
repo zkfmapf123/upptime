@@ -33,7 +33,7 @@ jobs:
           RESPONSE_TIME=$(curl -s -o /dev/null -w "%{time_total}" --max-time 10 https://www.dockerstatus.com || echo "0")
           echo "status_code=$STATUS_CODE" >> $GITHUB_OUTPUT
           echo "response_time=$RESPONSE_TIME" >> $GITHUB_OUTPUT
-          
+
       - name: Check AWS Status
         id: aws
         continue-on-error: true
@@ -133,7 +133,7 @@ jobs:
 
           # Slack 메시지 생성
           TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
-          
+
           PAYLOAD=$(cat <<EOF
           {
             "channel": "${SLACK_CHANNEL}",
@@ -185,4 +185,3 @@ jobs:
             --data "${PAYLOAD}" \
             "${SLACK_WEBHOOK_URL}"
 ```
-
