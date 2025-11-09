@@ -8,8 +8,5 @@
 - [x] Slack
 - [x] Github
 
-## Execute
+## Slack Alarm
 
-```sh
-  npx --yes @upptime/uptime-monitor site
-```
