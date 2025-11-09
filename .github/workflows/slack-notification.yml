@@ -57,6 +57,15 @@ jobs:
           echo "status_code=$STATUS_CODE" >> $GITHUB_OUTPUT
           echo "response_time=$RESPONSE_TIME" >> $GITHUB_OUTPUT
 
+      - name: Check OpenAI Status
+        id: openai
+        continue-on-error: true
+        run: |
+          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 https://status.openai.com || echo "000")
+          RESPONSE_TIME=$(curl -s -o /dev/null -w "%{time_total}" --max-time 10 https://status.openai.com || echo "0")
+          echo "status_code=$STATUS_CODE" >> $GITHUB_OUTPUT
+          echo "response_time=$RESPONSE_TIME" >> $GITHUB_OUTPUT
+
       - name: Send Slack Notification
         if: always()
         env:
@@ -118,6 +127,17 @@ jobs:
             GITHUB_TEXT="DOWN"
           fi
 
+          # OpenAI 상태 체크
+          OPENAI_STATUS="${{ steps.openai.outputs.status_code }}"
+          OPENAI_TIME="${{ steps.openai.outputs.response_time }}"
+          if [ "$OPENAI_STATUS" -ge 200 ] && [ "$OPENAI_STATUS" -lt 400 ]; then
+            OPENAI_EMOJI="🟢"
+            OPENAI_TEXT="UP"
+          else
+            OPENAI_EMOJI="🔴"
+            OPENAI_TEXT="DOWN"
+          fi
+
           # Slack 메시지 생성
           TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
           
@@ -155,6 +175,11 @@ jobs:
                   {
                     "title": "${GITHUB_EMOJI} GitHub Status",
                     "value": "Status: ${GITHUB_TEXT} (${GITHUB_STATUS})\nResponse: ${GITHUB_TIME}s",
+                    "short": true
+                  },
+                  {
+                    "title": "${OPENAI_EMOJI} OpenAI Status",
+                    "value": "Status: ${OPENAI_TEXT} (${OPENAI_STATUS})\nResponse: ${OPENAI_TIME}s",
                     "short": true
                   }
                 ],

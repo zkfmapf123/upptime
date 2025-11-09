@@ -1,0 +1,92 @@
+# Upptime Project Rules
+
+## SaaS 모니터링 추가 규칙
+
+새로운 SaaS 서비스를 추가할 때는 **반드시** 다음 두 파일을 모두 수정해야 합니다:
+
+### 1. .upptimerc.yml
+- `sites` 섹션에 새로운 서비스 추가
+- 형식:
+  ```yaml
+  - name: [서비스명] Status
+    url: https://status.[서비스도메인]
+  ```
+
+### 2. .github/workflows/slack-notification.yml
+- 새로운 체크 step 추가
+- Slack 알림 메시지에 해당 서비스 상태 추가
+- 필요한 수정 사항:
+  1. `Check [서비스명] Status` step 추가 (curl로 상태 체크)
+  2. `Send Slack Notification` step의 상태 체크 로직 추가
+  3. Slack payload의 `fields` 배열에 새 서비스 추가
+
+## 예시: 새로운 SaaS 추가 시
+
+만약 "Notion"을 추가한다면:
+
+### .upptimerc.yml
+```yaml
+sites:
+  # ... 기존 서비스들
+  - name: Notion Status
+    url: https://status.notion.so
+```
+
+### slack-notification.yml
+```yaml
+# 1. Check step 추가
+- name: Check Notion Status
+  id: notion
+  continue-on-error: true
+  run: |
+    STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 https://status.notion.so || echo "000")
+    RESPONSE_TIME=$(curl -s -o /dev/null -w "%{time_total}" --max-time 10 https://status.notion.so || echo "0")
+    echo "status_code=$STATUS_CODE" >> $GITHUB_OUTPUT
+    echo "response_time=$RESPONSE_TIME" >> $GITHUB_OUTPUT
+
+# 2. 상태 체크 로직 추가 (Send Slack Notification step 안에)
+NOTION_STATUS="${{ steps.notion.outputs.status_code }}"
+NOTION_TIME="${{ steps.notion.outputs.response_time }}"
+if [ "$NOTION_STATUS" -ge 200 ] && [ "$NOTION_STATUS" -lt 400 ]; then
+  NOTION_EMOJI="🟢"
+  NOTION_TEXT="UP"
+else
+  NOTION_EMOJI="🔴"
+  NOTION_TEXT="DOWN"
+fi
+
+# 3. Slack payload fields에 추가
+{
+  "title": "${NOTION_EMOJI} Notion Status",
+  "value": "Status: ${NOTION_TEXT} (${NOTION_STATUS})\nResponse: ${NOTION_TIME}s",
+  "short": true
+}
+```
+
+## 현재 모니터링 중인 서비스
+
+1. Docker Status - https://www.dockerstatus.com
+2. AWS Status - https://status.aws.amazon.com
+3. Atlassian Status (Confluence & Jira) - https://status.atlassian.com
+4. Slack Status - https://status.slack.com
+5. GitHub Status - https://www.githubstatus.com
+6. OpenAI Status - https://status.openai.com
+
+## Slack 알림 설정
+
+필요한 GitHub Secrets:
+- `SLACK_WEBHOOK_URL`: Slack Incoming Webhook URL
+- `SLACK_CHANNEL`: 알림을 받을 Slack 채널 (예: #monitoring)
+
+## 워크플로우 실행
+
+- 자동 실행: 현재 비활성화 (schedule 주석처리됨)
+- 수동 실행: GitHub Actions → "Slack Notification" → "Run workflow"
+
+## 주의사항
+
+- 모든 SaaS 추가 시 두 파일을 **동시에** 업데이트해야 함
+- Slack 알림에서 누락되지 않도록 주의
+- 서비스 URL은 가능한 공식 status 페이지 사용
+- 각 서비스의 id는 소문자로 작성 (예: github, aws, notion)
+
