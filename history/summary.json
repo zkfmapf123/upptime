@@ -13,7 +13,7 @@
     "time": 281,
     "timeDay": 273,
     "timeWeek": 305,
-    "timeMonth": 281,
+    "timeMonth": 283,
     "timeYear": 281,
     "dailyMinutesDown": {}
   },
@@ -49,7 +49,7 @@
     "time": 317,
     "timeDay": 295,
     "timeWeek": 216,
-    "timeMonth": 317,
+    "timeMonth": 318,
     "timeYear": 317,
     "dailyMinutesDown": {}
   },
@@ -67,7 +67,7 @@
     "time": 429,
     "timeDay": 427,
     "timeWeek": 427,
-    "timeMonth": 429,
+    "timeMonth": 430,
     "timeYear": 429,
     "dailyMinutesDown": {}
   },
@@ -85,7 +85,7 @@
     "time": 186,
     "timeDay": 208,
     "timeWeek": 201,
-    "timeMonth": 186,
+    "timeMonth": 183,
     "timeYear": 186,
     "dailyMinutesDown": {}
   },
@@ -94,7 +94,7 @@
     "url": "https://status.openai.com",
     "icon": "https://icons.duckduckgo.com/ip3/status.openai.com.ico",
     "slug": "open-ai-status",
-    "status": "up",
+    "status": "down",
     "uptime": "100.00%",
     "uptimeDay": "100.00%",
     "uptimeWeek": "100.00%",
@@ -103,7 +103,7 @@
     "time": 492,
     "timeDay": 292,
     "timeWeek": 508,
-    "timeMonth": 492,
+    "timeMonth": 498,
     "timeYear": 492,
     "dailyMinutesDown": {}
   }
