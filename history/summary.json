@@ -94,17 +94,17 @@
     "url": "https://status.openai.com",
     "icon": "https://icons.duckduckgo.com/ip3/status.openai.com.ico",
     "slug": "open-ai-status",
-    "status": "down",
+    "status": "up",
     "uptime": "100.00%",
     "uptimeDay": "100.00%",
     "uptimeWeek": "100.00%",
     "uptimeMonth": "100.00%",
     "uptimeYear": "100.00%",
-    "time": 484,
-    "timeDay": 461,
-    "timeWeek": 509,
-    "timeMonth": 522,
-    "timeYear": 484,
+    "time": 483,
+    "timeDay": 459,
+    "timeWeek": 502,
+    "timeMonth": 520,
+    "timeYear": 483,
     "dailyMinutesDown": {}
   }
 ]
