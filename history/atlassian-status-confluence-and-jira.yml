@@ -1,7 +1,7 @@
 url: https://status.atlassian.com
-status: down
-code: 405
-responseTime: 178
-lastUpdated: 2026-06-11T22:04:22.526Z
+status: up
+code: 200
+responseTime: 261
+lastUpdated: 2026-06-11T22:46:48.911Z
 startTime: 2025-11-09T14:44:45.731Z
 generator: Upptime <https://github.com/upptime/upptime>
